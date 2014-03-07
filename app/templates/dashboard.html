@@ -1,10 +1,9 @@
 {% extends "index.html" %}
 {% block body %}
 {% for section in dash.sections() %}
-    <div id="section_{{ section }}">
+    <div id="section_{{ section }}" class="section">
         <h2>{{ dash.get(section, 'title') }}</h2>
-        <div id="content_{{ section }}" class="content"
-             data-type="{{ dash.get(section, 'display') }}"></div>
+        <div id="content_{{ section }}" class="content {{ dash.get(section, 'display') }}" data-type="{{ dash.get(section, 'display') }}"></div>
     </div>
 {% endfor %}
 

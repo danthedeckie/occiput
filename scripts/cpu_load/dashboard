@@ -1,0 +1,21 @@
+#!./.virtualenv/bin/python
+
+import pygal
+
+from subprocess import check_output
+
+cpus = float(check_output(['/usr/sbin/sysctl','-n','hw.ncpu']).strip()) *4
+
+now = (cpus/ 100) * float(check_output("top -l 1 -F -R|head -n5|awk '/CPU usage/{printf \"%d\", $3+0}'", shell=True))
+
+nums = check_output(['/usr/sbin/sysctl','-n','vm.loadavg'])[1:-2].split()
+
+bar_chart = pygal.HorizontalBar(range=(0, cpus))
+
+bar_chart.add('% NOW', now)
+
+bar_chart.add('Last Minute Load', float(nums[0]))
+bar_chart.add('5 Mins', float(nums[1]))
+bar_chart.add('15 Mins', float(nums[2]))
+
+print bar_chart.render()

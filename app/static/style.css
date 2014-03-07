@@ -1,14 +1,16 @@
 body {
     font-family: Sans-Serif;
-    background-color: #eee;
+    background-color: #011;
+    color: #9ab;
 }
-h1, h2 {
+
+h1, h2, p,  {
     text-align: center;
     font-weight: thin;
-    color: #333;
 }
+
 a {
-    color: blue;
+    color: 890;
     font-weight: bold;
     text-decoration: none;
 }
@@ -18,4 +20,15 @@ a:hover {
 }
 a:active {
     color: red;
+}
+
+div.section {
+    width: 45%;
+    border: 1px solid #234;
+    float: left;
+    overflow-x: hidden;
+}
+
+div.content.pretext {
+    overflow: scroll;
 }
