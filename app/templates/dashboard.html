@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+{% block body %}
+{% for section in dash.sections() %}
+    <div id="section_{{ section }}">
+        <h2>{{ dash.get(section, 'title') }}</h2>
+        <div id="content_{{ section }}" class="content"
+             data-type="{{ dash.get(section, 'display') }}"></div>
+    </div>
+{% endfor %}
+
+{% endblock %}
+
+
+{% block end_of_page_javascript %}
+{{ super() }}
+<script>
+SECTIONS={{dash.sections() |tojson }};
+start_getting(SECTIONS);
+</script>
+{% endblock %}
+
