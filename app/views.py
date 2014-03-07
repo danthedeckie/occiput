@@ -1,4 +1,5 @@
 from flask import render_template, url_for, request, jsonify, safe_join, json
+from os.path import join as pathjoin
 from subprocess import check_output
 from ConfigParser import RawConfigParser
 from app import app
@@ -19,8 +20,7 @@ def script_get(scriptname):
     if not scriptname in dash.sections():
        return jsonify({"error": "Unknown scriptname!"})
 
-    script = safe_join(app.config['SCRIPTPATH'], scriptname)
-    print script
+    script = safe_join(app.config['SCRIPTPATH'], pathjoin(scriptname, 'dashboard'))
     output = check_output(script)
 
     try:
