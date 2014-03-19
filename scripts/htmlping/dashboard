@@ -1,0 +1,40 @@
+#!./.virtualenv/bin/python
+'''
+    simple 'ping a host, tell me if it's live, or if it's slow
+    script. takes one argument (the host). times out after 3 seconds.
+'''
+
+from sys import argv
+from subprocess import check_output
+
+def main(url):
+    ''' ping a url, print some HTML '''
+
+    try:
+
+        fulltext = check_output(['ping', '-ot', '3', url])
+
+        time = float(fulltext[fulltext.find('time=')+5:].split()[0])
+
+        color = 'green'
+
+        if time > 500:
+            color = 'red'
+        elif time > 300:
+            color = 'orange'
+        if time > 100:
+            color = 'blue'
+
+        print "<div class='' style='background-color: {color};'>" \
+              "<b>URL:</b> {url} <br/>" \
+              "<b>Pingtime:</b> {time} ms</div>" \
+              .format(url=url, time=time, color=color)
+
+    except Exception as excp: #pylint: disable=broad-except
+        print '<div class="" style="background-color: red;">' \
+              '<b>URL:</b> {url} <br/>' \
+              '<b>Failed</b><br/><pre>{err}</pre></div>' \
+              .format(url=url, err=str(excp))
+
+if __name__ == '__main__':
+    main(argv[1])

@@ -1,3 +1,6 @@
 flask
 pylint
 pygal
+requests
+beautifulsoup4
+gevent

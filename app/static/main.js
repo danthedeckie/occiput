@@ -12,6 +12,9 @@ function start_getting(sections) {
                     //new_html = '<svg width="200px" height="200px">' + data['data'] + '</svg>';
                     new_html = data['data'];
                     break;
+                case 'html':
+                    new_html = data['data'];
+                    break;
                 case 'pretext':
                 default:
                     new_html = '<pre>' + data['data'] + '</pre>';
@@ -20,6 +23,6 @@ function start_getting(sections) {
 
         }}(sections[i]));
     }
-    setTimeout(again, 4000);
+    setTimeout(again, 2000);
 
 }

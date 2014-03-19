@@ -1,0 +1,125 @@
+#!./.virtualenv/bin/python
+'''
+    A simple script for checking a website is up and running, and running some
+    basic checks on it to make sure it's not been hacked, or crashed.
+'''
+
+import requests
+from bs4 import BeautifulSoup
+from sys import argv
+
+
+def un_lol(raw_text):
+    ''' do basic lolspeak->plaintext conversion. '''
+    raw_text = raw_text.lower()
+
+    replaces = {'0': 'o', '1': 'i', '3': 'e', '4': 'a',
+                '5': 's', '7': 't', '8': 'ate', '><': 'x', '}{': 'x'}
+
+    for key, value in replaces.items():
+        raw_text = raw_text.replace(key, value)
+
+    return raw_text
+
+
+def page_clean(text):
+    ''' take some (HTML) text, and check for bad words in it, and bad words
+        in any A tags (links). Return a words check score, and a links check
+        score. '''
+
+    soup = BeautifulSoup(text)
+
+    raw_text = un_lol(soup.get_text())
+
+    split_doc = raw_text.split()
+
+    # Dear Children, Do not read this section:
+    badwords = ["haxor", "hackerz", "hackorz", "pwn", "pron", "downloadz",
+                "warez", "shit", "shite", "fuck", "fucks", "fuxor", "fucked",
+                "fucking", "motherfuck", "motherfucking", "cunt", "cunts",
+                "cuntz", "bitch", "bitches", "bitchez", "secks"]
+
+    mediumwords = ["hacked", "porn", "lol", "freak", "torrent", "pornography",
+                   "bitcoin", "bittorrent",
+                   "xxx", "babes", "babez", "girlz", "sex", "sexy", "hell",
+                   "jihad", "achan", "rofl", "masturbate", "dick", "pussy",
+                   "penis", "vagina", "bastard", "viagra", "free", "cheap",
+                   "adult"]
+
+    badwords_score = 0
+    badlinks_score = 0
+
+    for word in badwords:
+        badwords_score += (split_doc.count(word) * 10)
+
+    for word in mediumwords:
+        badwords_score += split_doc.count(word)
+
+    for link in soup.find_all('a'):
+
+        href = link.get('href')
+
+        if not href:
+            continue
+
+        href = un_lol(href)
+
+        for word in badwords:
+            if word in href:
+                badlinks_score += 10
+
+        for word in mediumwords:
+            if word in href:
+                badlinks_score += 1
+
+    return badwords_score, badlinks_score
+
+
+def main(url):
+    '''
+        Take a URL, test it, and print HTML.
+    '''
+
+    if not url.startswith('http'):
+        url = 'http://' + url
+
+    try:
+        req = requests.get(url, timeout=10)
+
+        badwords, badlinks = page_clean(req.text)
+
+        pingtime = req.elapsed.total_seconds()
+
+        status = req.status_code
+
+        color = 'blue'
+
+        if badwords > 10 or badlinks > 10 or pingtime > 2 or status != 200:
+            color = 'orange'
+
+            if badwords > 20 or badlinks > 20 or pingtime > 5 or status > 299:
+                color = 'red'
+
+        print "<div class='' style='background-color: {color};'>" \
+              "<b>URL:</b> {url} <br/>" \
+              "<b>Status:</b> {status} <b>Time:</b> {time} <br/>" \
+              "<b>Bad Words:</b> {badwords_score}" \
+              "<b>Bad Links:</b> {badlinks_score}</div>" \
+              .format(url=url, badwords_score=badwords,
+                      badlinks_score=badlinks, status=status,
+                      time=pingtime, color=color)
+
+    except requests.ConnectionError:
+        print '<div class="" style="background-color: red;">' \
+              '<b>URL:</b> {url} <br/>' \
+              '<b>CONNECTION ERROR!</b></div>' \
+              .format(url=url)
+    except requests.Timeout:
+        print '<div class="" style="background-color: red;">' \
+              '<b>URL:</b> {url} <br/>' \
+              '<b>Timed out!</b></div>' \
+              .format(url=url)
+
+if __name__ == '__main__':
+
+    main(argv[1])
