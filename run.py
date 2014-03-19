@@ -6,7 +6,7 @@
 
 import sys
 reload(sys)
-sys.setdefaultencoading('utf-8') #pylint: disable=no-member
+sys.setdefaultencoding('utf-8') #pylint: disable=no-member
 
 from app import app
 
