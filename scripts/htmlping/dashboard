@@ -4,15 +4,18 @@
     script. takes one argument (the host). times out after 3 seconds.
 '''
 
-from sys import argv
+from sys import argv, platform
 from subprocess import check_output
 
 def main(url):
     ''' ping a url, print some HTML '''
 
     try:
-
-        fulltext = check_output(['ping', '-ot', '3', url])
+        if 'linux' in platform:
+            fulltext = check_output(['ping', '-w3', '-c1', url])
+        else:
+            # OSX, BSD...
+            fulltext = check_output(['ping', '-ot', '3', url])
 
         time = float(fulltext[fulltext.find('time=')+5:].split()[0])
 
