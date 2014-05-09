@@ -9,9 +9,6 @@
 <body>
 <header>
   <h1>{{ display_title }}</h1>
-  <nav>
-    {% block nav %} TODO: NAV {% endblock %}
-  </nav>
 </header>
 
 {% block body %}
@@ -27,6 +24,7 @@
 {% block end_of_page_javascript %}
   <!-- jquery, ga, whatever goes here. -->
 <script type="text/javascript" src="{{ url_for('static',filename='jquery-1.9.1.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='isotope.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static',filename='main.js') }}"></script>
 {% endblock %}
 </body>

@@ -8,6 +8,13 @@ h1, h2, p,  {
     text-align: center;
     font-weight: thin;
 }
+h2 {
+    line-height: 1em;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+    font-weight: 100;
+}
 
 a {
     color: 890;
@@ -22,11 +29,13 @@ a:active {
     color: red;
 }
 
-div.section {
-    width: 14%;
+.section {
     border: 1px solid #234;
-    float: left;
     overflow-x: hidden;
+    width: 190px;
+}
+.content {
+    padding: 2px;
 }
 
 div.content.pretext {

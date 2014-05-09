@@ -94,6 +94,8 @@ def main(url):
 
         color = 'blue'
 
+        totalscore = 1000 - ((badwords + badlinks + 1) * (100 * pingtime))
+
         if badwords > 10 or badlinks > 10 or pingtime > 2 or status != 200:
             color = 'orange'
 
@@ -101,25 +103,39 @@ def main(url):
                 color = 'red'
 
         print "<div class='' style='background-color: {color};'>" \
+              "<span class='sort-state'>{totalscore}</span>" \
               "<b>URL:</b> {url} <br/>" \
               "<b>Status:</b> {status} <b>Time:</b> {time} <br/>" \
               "<b>Bad Words:</b> {badwords_score}" \
               "<b>Bad Links:</b> {badlinks_score}</div>" \
               .format(url=url, badwords_score=badwords,
                       badlinks_score=badlinks, status=status,
-                      time=pingtime, color=color)
+                      time=pingtime, totalscore=totalscore, color=color)
 
     except requests.ConnectionError:
         print '<div class="" style="background-color: red;">' \
+              '<span class="sort-state">0</span>' \
               '<b>URL:</b> {url} <br/>' \
               '<b>CONNECTION ERROR!</b></div>' \
               .format(url=url)
     except requests.Timeout:
         print '<div class="" style="background-color: red;">' \
+              '<span class="sort-state">10</span>' \
               '<b>URL:</b> {url} <br/>' \
               '<b>Timed out!</b></div>' \
               .format(url=url)
 
-if __name__ == '__main__':
+class PickleFunc(object):
+    def __init__(self, func):
+        self.func = func
 
-    main(argv[1])
+def pickle():
+    import pickle
+    print pickle.dumps(PickleFunc(main))
+
+if __name__ == '__main__':
+    
+    if argv[1] == "dump":
+        pickle()
+    else:
+        main(argv[1])

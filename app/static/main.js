@@ -20,9 +20,10 @@ function start_getting(sections) {
                     new_html = '<pre>' + data['data'] + '</pre>';
             }
             $('#content_' + s).html(new_html);
+            $('#dash').isotope('updateSortData').isotope();
 
         }}(sections[i]));
     }
-    setTimeout(again, 2000);
+    setTimeout(again, 20000);
 
 }

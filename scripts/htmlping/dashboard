@@ -26,12 +26,15 @@ def main(url):
             color = 'blue'
 
         print "<div class='' style='background-color: {color};'>" \
+              "<span class='sort-state'>{score_time}</span>" \
               "<b>URL:</b> {url} <br/>" \
               "<b>Pingtime:</b> {time} ms</div>" \
-              .format(url=url, time=time, color=color)
+              .format(url=url, time=time, color=color,
+                      score_time=1000-(10*time))
 
     except Exception as excp: #pylint: disable=broad-except
         print '<div class="" style="background-color: red;">' \
+              '<span class="sort-state">0</span>' \
               '<b>URL:</b> {url} <br/>' \
               '<b>Failed</b><br/><pre>{err}</pre></div>' \
               .format(url=url, err=str(excp))

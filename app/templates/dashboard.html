@@ -1,12 +1,15 @@
 {% extends "index.html" %}
 {% block body %}
+<div id="dash" class="js-masonry" data-masonry-options='{ "itemSelector": ".section", "columnWidth": 100}'>
 {% for section in dash.sections() %}
-    <div id="section_{{ section }}" class="section">
+    <div class="section">
+    <div id="section_{{ section }}">
         <h2>{{ dash.get(section, 'title') }}</h2>
         <div id="content_{{ section }}" class="content {{ dash.get(section, 'display') }}" data-type="{{ dash.get(section, 'display') }}"></div>
     </div>
+    </div>
 {% endfor %}
-
+</div>
 {% endblock %}
 
 
@@ -14,6 +17,13 @@
 {{ super() }}
 <script>
 SECTIONS={{dash.sections() |tojson }};
+$('#dash').isotope({getSortData: {
+                                'sortstate': function(elem) {
+                                    var x = $(elem).find('.sort-state').text();
+                                    return parseFloat(x);
+                                }
+                                }, sortBy: 'sortstate'});
+
 start_getting(SECTIONS);
 </script>
 {% endblock %}

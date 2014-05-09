@@ -4,3 +4,4 @@ pygal
 requests
 beautifulsoup4
 gevent
+cloud
