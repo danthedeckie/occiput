@@ -45,8 +45,6 @@
     a while, and you want it to boot up instantly, showing the old
     values, and then update once it's all happily running.
 
-
-
 '''
 
 from time import time

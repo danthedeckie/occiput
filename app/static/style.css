@@ -41,3 +41,25 @@ a:active {
 div.content.pretext {
     overflow: scroll;
 }
+
+b {
+    color: #fff;
+}
+
+.ok {
+    background-color: green;
+}
+
+.not_great {
+    background-color: blue;
+}
+
+.bad {
+    background-color: orange;
+    color: #000;
+}
+
+.fail {
+    background-color: red;
+    color: white;
+}

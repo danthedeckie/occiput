@@ -92,17 +92,17 @@ def main(url):
 
         status = req.status_code
 
-        color = 'blue'
+        status_class = 'ok'
 
         totalscore = 1000 - ((badwords + badlinks + 1) * (100 * pingtime))
 
         if badwords > 10 or badlinks > 10 or pingtime > 2 or status != 200:
-            color = 'orange'
+            status_class = 'not_great'
 
             if badwords > 20 or badlinks > 20 or pingtime > 5 or status > 299:
-                color = 'red'
+                status_class = 'bad'
 
-        print "<div class='' style='background-color: {color};'>" \
+        print "<div class='{status_class}'>" \
               "<span class='sort-state'>{totalscore}</span>" \
               "<b>URL:</b> {url} <br/>" \
               "<b>Status:</b> {status} <b>Time:</b> {time} <br/>" \
@@ -110,32 +110,20 @@ def main(url):
               "<b>Bad Links:</b> {badlinks_score}</div>" \
               .format(url=url, badwords_score=badwords,
                       badlinks_score=badlinks, status=status,
-                      time=pingtime, totalscore=totalscore, color=color)
+                      time=pingtime, totalscore=totalscore, status_class=status_class)
 
     except requests.ConnectionError:
-        print '<div class="" style="background-color: red;">' \
+        print '<div class="fail">' \
               '<span class="sort-state">0</span>' \
               '<b>URL:</b> {url} <br/>' \
               '<b>CONNECTION ERROR!</b></div>' \
               .format(url=url)
     except requests.Timeout:
-        print '<div class="" style="background-color: red;">' \
+        print '<div class="fail">' \
               '<span class="sort-state">10</span>' \
               '<b>URL:</b> {url} <br/>' \
               '<b>Timed out!</b></div>' \
               .format(url=url)
 
-class PickleFunc(object):
-    def __init__(self, func):
-        self.func = func
-
-def pickle():
-    import pickle
-    print pickle.dumps(PickleFunc(main))
-
 if __name__ == '__main__':
-    
-    if argv[1] == "dump":
-        pickle()
-    else:
-        main(argv[1])
+    main(argv[1])
